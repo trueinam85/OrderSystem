@@ -10,9 +10,7 @@ namespace ModelsPackage
         public int Id { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        public int CustomerId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public CustomerVM Customer { get; set; } = new CustomerVM();
 
         [DataType(DataType.Date)]
         [Display(Name = "Order Date")]
@@ -20,6 +18,9 @@ namespace ModelsPackage
 
         public DateTime OrderDate { get; set; }
         public List<OrderLineVM> OrderLines { get; set; } = new List<OrderLineVM>();
+        
+        [Display(Name = "Total Amount")]
+        public int TotalAmount { get; set; }
 
     }
 }
