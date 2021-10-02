@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ModelsPackage;
 using OrderSystem.Data;
 using OrderSystem.Helpers.VMMappers;
 
@@ -77,24 +78,39 @@ namespace OrderSystem.Controllers
 
             return View(OrderMapper.MappToOrdersVMList(orders, items).FirstOrDefault());
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FirstName");
-            return View();
+            var customers = await _context.Customers.ToListAsync();
+
+            List<object> customersList = new List<object>();
+            foreach (var customer in customers)
+                customersList.Add(new
+                {
+                    Id = customer.Id,
+                    Name = customer.FirstName + ", " + customer.LastName
+                });
+            var empty = new
+            {
+                Id = -1,
+                Name = "Please select customer"
+            };
+            customersList.Insert(0, empty);
+            ViewData["CustomerId"] = new SelectList(customersList, "Id", "Name");
+
+            return View(new OrderVM());
         }
 
       
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CustomerId,OrderDate")] Orders orders)
+        public async Task<IActionResult> Create([FromForm] OrderVM orders)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(orders);
-                await _context.SaveChangesAsync();
+                //_context.Add(orders);
+                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FirstName", orders.CustomerId);
+            //ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FirstName", orders.CustomerId);
             return View(orders);
         }
 

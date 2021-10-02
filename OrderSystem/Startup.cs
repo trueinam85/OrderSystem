@@ -55,7 +55,7 @@ namespace OrderSystem
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Customers}/{action=Index}/{id?}");
+                    pattern: "{controller=Orders}/{action=create}/{id?}");
             });
         }
     }

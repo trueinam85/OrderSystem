@@ -108,6 +108,8 @@ namespace OrderSystem.Data
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
+        public DbSet<ModelsPackage.OrderVM> OrderVM { get; set; }
+
        
     }
 }

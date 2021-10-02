@@ -48,8 +48,8 @@ namespace OrderSystem.Controllers
         // GET: OrderLines/Create
         public IActionResult Create()
         {
-            ViewData["ItemId"] = new SelectList(_context.Items, "Id", "Brand");
-            ViewData["OrdernNumber"] = new SelectList(_context.Orders, "Id", "Id");
+            
+
             return View();
         }
 

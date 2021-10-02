@@ -9,7 +9,7 @@ namespace ModelsPackage
     {
         public int Id { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        //[Required(AllowEmptyStrings = false)]
         public CustomerVM Customer { get; set; } = new CustomerVM();
 
         [DataType(DataType.Date)]

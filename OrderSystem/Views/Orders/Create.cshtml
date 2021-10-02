@@ -1,0 +1,121 @@
+﻿@model ModelsPackage.OrderVM
+@using ModelsPackage
+@inject OrderSystem.Data.ApplicationDbContext _context
+@using OrderSystem.Helpers.VMMappers
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>OrderVM</h4>
+<hr />
+<div class="row">
+    <div>
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="col-md-7">
+                <div class="form-group">
+                    <label asp-for="OrderDate" class="control-label"></label>
+                    @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Customer, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="OrderDate" class="control-label"></label>
+                    <input asp-for="OrderDate" class="form-control" />
+                    <span asp-validation-for="OrderDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-9">
+                @{
+                    if (Model.OrderLines.Count() == 0)
+                    {
+                        Model.OrderLines = ItemMapper.MappToOrderLineVMLis(_context.Items.ToList());
+                    }
+
+                    if (Model.OrderLines.Count() > 0)
+                    {
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.OrderLines[0].ItemId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.OrderLines[0].ItemBrand)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.OrderLines[0].ItemModel)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.OrderLines[0].ItemColor)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.OrderLines[0].Price)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.OrderLines[0].Quantity)
+                                    </th>
+
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @for (int i = 0; i < Model.OrderLines.Count(); i++)
+                                {
+                                <tr>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.OrderLines[i].ItemId)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.OrderLines[i].ItemBrand)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.OrderLines[i].ItemModel)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.OrderLines[i].ItemColor)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.OrderLines[i].Price)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.OrderLines[i].Quantity)
+                                    </td>
+
+
+
+                                </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    }
+
+                }
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TotalAmount" class="control-label"></label>
+                <input asp-for="TotalAmount" class="form-control" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
