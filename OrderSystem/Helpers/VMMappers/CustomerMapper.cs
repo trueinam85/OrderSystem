@@ -30,5 +30,15 @@ namespace OrderSystem.Helpers.VMMappers
                 RegisteredForNewsLetter = customer.RegisteredForNewsLetter
             };
         }
+        public static Customers MappToCumster(CustomerVM customer)
+        {
+            return new Customers
+            {
+                Id = customer.Id,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                RegisteredForNewsLetter = customer.RegisteredForNewsLetter
+            };
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace OrderSystem.Data
         {
             modelBuilder.Entity<Customers>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
@@ -53,7 +53,7 @@ namespace OrderSystem.Data
 
             modelBuilder.Entity<Items>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Brand)
                     .IsRequired()
@@ -75,7 +75,7 @@ namespace OrderSystem.Data
             {
                 entity.HasKey(e => e.LineNumber);
 
-                entity.Property(e => e.LineNumber).ValueGeneratedNever();
+                entity.Property(e => e.LineNumber).ValueGeneratedOnAdd();
 
                 entity.HasOne(d => d.Item)
                     .WithMany(p => p.OrderLines)
@@ -92,7 +92,7 @@ namespace OrderSystem.Data
 
             modelBuilder.Entity<Orders>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
