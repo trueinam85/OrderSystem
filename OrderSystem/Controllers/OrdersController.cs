@@ -20,7 +20,6 @@ namespace OrderSystem.Controllers
             _context = context;
         }
 
-        // GET: Orders
         public async Task<IActionResult> Index()
         {
             var orderObjects = await _context.Orders.Include(o => o.Customer)
@@ -98,6 +97,10 @@ namespace OrderSystem.Controllers
             ModelState.Remove("Customer.FirstName");
             ModelState.Remove("Customer.LastName");
 
+            if(orderVM.OrderLines.Where(o=>o.Quantity>=1).Count()==0)
+            {
+                ModelState.AddModelError("Customer", "Empty order cannot be created! ");
+            }
             if (ModelState.IsValid)
             {
                 var order = OrderMapper.MappToOrder(orderVM);
@@ -105,7 +108,7 @@ namespace OrderSystem.Controllers
                 _context.Add(order);
                 await _context.SaveChangesAsync();
                 await _context.Entry(order).ReloadAsync();
-                var orderLines = OrderMapper.MappToOrderLineList(orderVM.OrderLines, order.Id);
+                var orderLines = OrderMapper.MappToOrderLineList(orderVM.OrderLines.Where(o => o.Quantity >= 1).ToList(), order.Id);
                 _context.AddRange(orderLines);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
