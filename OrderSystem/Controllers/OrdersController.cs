@@ -94,6 +94,7 @@ namespace OrderSystem.Controllers
             {
                 ModelState.AddModelError("CustomerId", "Please select a customer");
             }
+            // customer object we dont get but instead customerId only
             ModelState.Remove("Customer.FirstName");
             ModelState.Remove("Customer.LastName");
 
@@ -105,7 +106,8 @@ namespace OrderSystem.Controllers
                 await _context.SaveChangesAsync();
                 await _context.Entry(order).ReloadAsync();
                 var orderLines = OrderMapper.MappToOrderLineList(orderVM.OrderLines, order.Id);
-                await _context.AddRangeAsync(orderLines);
+                _context.AddRange(orderLines);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
