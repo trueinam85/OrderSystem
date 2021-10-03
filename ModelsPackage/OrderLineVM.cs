@@ -24,6 +24,7 @@ namespace ModelsPackage
         [Required]
         [Display(Name = "Unit Price")]
         public int Price { get; set; }
+
         [Range(0, 999999999)]
         [Required]
         public int Quantity { get; set; }

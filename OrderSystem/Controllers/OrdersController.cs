@@ -80,6 +80,40 @@ namespace OrderSystem.Controllers
         }
         public async Task<IActionResult> Create()
         {
+
+            ViewData["CustomerId"] = new SelectList(await GetCustomersList(), "Id", "Name");
+
+            return View(new OrderVM());
+        }
+
+      
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm] OrderVM orderVM)
+        {
+            if(orderVM.CustomerId==-1)
+            {
+                ModelState.AddModelError("CustomerId", "Please select a customer");
+            }
+            ModelState.Remove("Customer.FirstName");
+            ModelState.Remove("Customer.LastName");
+
+            if (ModelState.IsValid)
+            {
+                var order = OrderMapper.MappToOrder(orderVM);
+
+                _context.Add(order);
+                await _context.SaveChangesAsync();
+                await _context.Entry(order).ReloadAsync();
+                var orderLines = OrderMapper.MappToOrderLineList(orderVM.OrderLines, order.Id);
+                await _context.AddRangeAsync(orderLines);
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewData["CustomerId"] = new SelectList(await GetCustomersList(), "Id", "Name", orderVM.CustomerId);
+            return View(orderVM);
+        }
+        private async Task<List<object>> GetCustomersList()
+        {
             var customers = await _context.Customers.ToListAsync();
 
             List<object> customersList = new List<object>();
@@ -95,24 +129,7 @@ namespace OrderSystem.Controllers
                 Name = "Please select customer"
             };
             customersList.Insert(0, empty);
-            ViewData["CustomerId"] = new SelectList(customersList, "Id", "Name");
-
-            return View(new OrderVM());
+            return customersList;
         }
-
-      
-        [HttpPost]
-        public async Task<IActionResult> Create([FromForm] OrderVM orders)
-        {
-            if (ModelState.IsValid)
-            {
-                //_context.Add(orders);
-                //await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            //ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FirstName", orders.CustomerId);
-            return View(orders);
-        }
-
     }
 }

@@ -63,5 +63,31 @@ namespace OrderSystem.Helpers.VMMappers
 
             return totalPrice;
         }
+
+        public static List<OrderLines> MappToOrderLineList(IList<OrderLineVM> orderLinesVMList, int orderNumber)
+        {
+            var orderLines = new List<OrderLines>();
+
+            for (int i = 0; i < orderLinesVMList.Count(); i++)
+            {
+                orderLines.Add(new OrderLines
+                {
+                    OrdernNumber = orderNumber,
+                    ItemId = orderLinesVMList[i].ItemId,
+                    Quantity = orderLinesVMList[i].Quantity,
+                });
+            }
+
+            return orderLines;
+        }
+
+        public static Orders MappToOrder(OrderVM orderVM)
+        {
+            return new Orders
+            {
+                CustomerId = orderVM.CustomerId,
+                OrderDate = orderVM.OrderDate,
+            };
+        }
     }
 }

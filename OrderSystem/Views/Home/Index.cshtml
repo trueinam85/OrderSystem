@@ -1,8 +1,18 @@
-﻿@{
+﻿@inject OrderSystem.Data.ApplicationDbContext _context
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to Order System</h1>
+    <br />
+    <br />
+    <br />
+
+    @{
+        <p> Total number of Orders= @_context.Orders.Count() </p>
+        <p> Total number of Customers= @_context.Customers.Count() </p>
+
+    }
+
 </div>

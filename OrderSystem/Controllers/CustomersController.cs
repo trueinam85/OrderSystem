@@ -34,8 +34,16 @@ namespace OrderSystem.Controllers
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromBody] CustomerVM customer)
+        public async Task<IActionResult> Create([FromForm] CustomerVM customer)
         {
+            if(customer.FirstName==null || customer.FirstName.Trim().Length<3 || customer.FirstName.Length>45)
+            {
+                ModelState.AddModelError("FirstName", "First name should be between 3 and 45 characters long");
+            }
+            if (customer.LastName == null || customer.LastName.Trim().Length < 3 || customer.LastName.Length > 45)
+            {
+                ModelState.AddModelError("LastName", "Last name should be between 3 and 45 characters long");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(CustomerMapper.MappToCumster(customer));

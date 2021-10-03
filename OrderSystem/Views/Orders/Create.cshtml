@@ -4,23 +4,21 @@
 @using OrderSystem.Helpers.VMMappers
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create New Order";
 }
 
-<h1>Create</h1>
-
-<h4>OrderVM</h4>
+<h4>Create New Order</h4>
 <hr />
 <div class="row">
     <div>
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="col-md-7">
+            <div class="col-md-3">
                 <div class="form-group">
-                    <label asp-for="OrderDate" class="control-label"></label>
+                    <label asp-for="CustomerId" class="control-label"></label>
                     @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Customer, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
                 </div>
 
                 <div class="form-group">
@@ -29,7 +27,7 @@
                     <span asp-validation-for="OrderDate" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-5 ">
                 @{
                     if (Model.OrderLines.Count() == 0)
                     {
@@ -41,9 +39,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.OrderLines[0].ItemId)
-                                    </th>
+                                    
                                     <th>
                                         @Html.DisplayNameFor(model => model.OrderLines[0].ItemBrand)
                                     </th>
@@ -69,26 +65,22 @@
                                 @for (int i = 0; i < Model.OrderLines.Count(); i++)
                                 {
                                 <tr>
+                                   
                                     <td>
-                                        @Html.TextAreaFor(model => model.OrderLines[i].ItemId)
+                                        @Html.TextBoxFor(model => model.OrderLines[i].ItemBrand, new { @readonly = true })
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.OrderLines[i].ItemBrand)
+                                        @Html.TextBoxFor(model => model.OrderLines[i].ItemModel, new { @readonly = true })
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.OrderLines[i].ItemModel)
+                                        @Html.TextBoxFor(model => model.OrderLines[i].ItemColor, new { @readonly = true })
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.OrderLines[i].ItemColor)
+                                        @Html.TextBoxFor(model => model.OrderLines[i].Price, new { @readonly = true })
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.OrderLines[i].Price)
+                                        @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @type = "number", @min = "0" })
                                     </td>
-                                    <td>
-                                        @Html.TextAreaFor(model => model.OrderLines[i].Quantity)
-                                    </td>
-
-
 
                                 </tr>
                                 }
@@ -98,12 +90,6 @@
                     }
 
                 }
-            </div>
-
-            <div class="form-group">
-                <label asp-for="TotalAmount" class="control-label"></label>
-                <input asp-for="TotalAmount" class="form-control" />
-                <span asp-validation-for="TotalAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
